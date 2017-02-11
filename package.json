@@ -1,0 +1,11 @@
+{
+  "name": "chattleship-server",
+  "version": "1.0.0",
+  "description": "A server for chat-based battleship",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Adam McCarthy",
+  "license": "MIT"
+}
