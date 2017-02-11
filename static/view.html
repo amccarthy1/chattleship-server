@@ -1,0 +1,197 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Chattleship UI</title>
+    <!-- I hate myself for this -->
+    <script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+    <style>
+.tile {
+    width: 2em;
+    height: 2em;
+}
+
+
+    </style>
+    <script>
+var reverseRows = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+var reverseCols = [ 1 ,  2 ,  3 ,  4 ,  5 ,  6 ,  7 ,  8 ,  9 ,  10];
+function toAlphaNum(row, col) {
+    var an_row = reverseRows[row];
+    var an_col = reverseCols[col];
+    return an_row + an_col;
+}
+function setBoard(board) {
+    for (var r = 0; r < board.length; r++) {
+        var row = board[r];
+        for (var c = 0; c < row.length; c++) {
+            var id = toAlphaNum(r, c);
+            document.getElementById(id).innerHTML = row[c];
+        }
+    }
+}
+
+function updateBoard() {
+    $.ajax('/board',{
+        dataType: "json",
+        success: function(response) {
+            if (response.player1) {
+                if (response.player1.board) {
+                    setBoard(response.player1.board);
+                }
+            }
+        }
+    })
+}
+
+$(document).ready(function() {
+    updateBoard();
+    setInterval(updateBoard, 2000);
+})
+
+    </script>
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>x</th>
+                <th>1</th>
+                <th>2</th>
+                <th>3</th>
+                <th>5</th>
+                <th>6</th>
+                <th>7</th>
+                <th>8</th>
+                <th>9</th>
+                <th>10</th>
+            </tr>
+        </thead>
+        <tr>
+            <td>A</td>
+            <td class="tile" id="A1"></td>
+            <td class="tile" id="A2"></td>
+            <td class="tile" id="A3"></td>
+            <td class="tile" id="A4"></td>
+            <td class="tile" id="A5"></td>
+            <td class="tile" id="A6"></td>
+            <td class="tile" id="A7"></td>
+            <td class="tile" id="A8"></td>
+            <td class="tile" id="A9"></td>
+            <td class="tile" id="A10"></td>
+        </tr>
+        <tr>
+            <td>B</td>
+            <td class="tile" id="B1"></td>
+            <td class="tile" id="B2"></td>
+            <td class="tile" id="B3"></td>
+            <td class="tile" id="B4"></td>
+            <td class="tile" id="B5"></td>
+            <td class="tile" id="B6"></td>
+            <td class="tile" id="B7"></td>
+            <td class="tile" id="B8"></td>
+            <td class="tile" id="B9"></td>
+            <td class="tile" id="B10"></td>
+        </tr><tr>
+            <td>C</td>
+            <td class="tile" id="C1"></td>
+            <td class="tile" id="C2"></td>
+            <td class="tile" id="C3"></td>
+            <td class="tile" id="C4"></td>
+            <td class="tile" id="C5"></td>
+            <td class="tile" id="C6"></td>
+            <td class="tile" id="C7"></td>
+            <td class="tile" id="C8"></td>
+            <td class="tile" id="C9"></td>
+            <td class="tile" id="C10"></td>
+        </tr><tr>
+            <td>D</td>
+            <td class="tile" id="D1"></td>
+            <td class="tile" id="D2"></td>
+            <td class="tile" id="D3"></td>
+            <td class="tile" id="D4"></td>
+            <td class="tile" id="D5"></td>
+            <td class="tile" id="D6"></td>
+            <td class="tile" id="D7"></td>
+            <td class="tile" id="D8"></td>
+            <td class="tile" id="D9"></td>
+            <td class="tile" id="D10"></td>
+        </tr><tr>
+            <td>E</td>
+            <td class="tile" id="E1"></td>
+            <td class="tile" id="E2"></td>
+            <td class="tile" id="E3"></td>
+            <td class="tile" id="E4"></td>
+            <td class="tile" id="E5"></td>
+            <td class="tile" id="E6"></td>
+            <td class="tile" id="E7"></td>
+            <td class="tile" id="E8"></td>
+            <td class="tile" id="E9"></td>
+            <td class="tile" id="E10"></td>
+        </tr><tr>
+            <td>F</td>
+            <td class="tile" id="F1"></td>
+            <td class="tile" id="F2"></td>
+            <td class="tile" id="F3"></td>
+            <td class="tile" id="F4"></td>
+            <td class="tile" id="F5"></td>
+            <td class="tile" id="F6"></td>
+            <td class="tile" id="F7"></td>
+            <td class="tile" id="F8"></td>
+            <td class="tile" id="F9"></td>
+            <td class="tile" id="F10"></td>
+        </tr><tr>
+            <td>G</td>
+            <td class="tile" id="G1"></td>
+            <td class="tile" id="G2"></td>
+            <td class="tile" id="G3"></td>
+            <td class="tile" id="G4"></td>
+            <td class="tile" id="G5"></td>
+            <td class="tile" id="G6"></td>
+            <td class="tile" id="G7"></td>
+            <td class="tile" id="G8"></td>
+            <td class="tile" id="G9"></td>
+            <td class="tile" id="G10"></td>
+        </tr><tr>
+            <td>H</td>
+            <td class="tile" id="H1"></td>
+            <td class="tile" id="H2"></td>
+            <td class="tile" id="H3"></td>
+            <td class="tile" id="H4"></td>
+            <td class="tile" id="H5"></td>
+            <td class="tile" id="H6"></td>
+            <td class="tile" id="H7"></td>
+            <td class="tile" id="H8"></td>
+            <td class="tile" id="H9"></td>
+            <td class="tile" id="H10"></td>
+        </tr><tr>
+            <td>I</td>
+            <td class="tile" id="I1"></td>
+            <td class="tile" id="I2"></td>
+            <td class="tile" id="I3"></td>
+            <td class="tile" id="I4"></td>
+            <td class="tile" id="I5"></td>
+            <td class="tile" id="I6"></td>
+            <td class="tile" id="I7"></td>
+            <td class="tile" id="I8"></td>
+            <td class="tile" id="I9"></td>
+            <td class="tile" id="I10"></td>
+        </tr><tr>
+            <td>J</td>
+            <td class="tile" id="J1"></td>
+            <td class="tile" id="J2"></td>
+            <td class="tile" id="J3"></td>
+            <td class="tile" id="J4"></td>
+            <td class="tile" id="J5"></td>
+            <td class="tile" id="J6"></td>
+            <td class="tile" id="J7"></td>
+            <td class="tile" id="J8"></td>
+            <td class="tile" id="J9"></td>
+            <td class="tile" id="J10"></td>
+        </tr>
+</body>
+
+</html>

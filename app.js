@@ -263,25 +263,32 @@ router.get('/gamedata', function(req, res) {
 router.post('/fire', function(req, res) {
     var player = req.body.player;
     if (player !== activeplayer || currentphase !== phase.FIRING) {
-        res.json({player: activeplayer, phase: currentphase, winner: winner})
+        res.json({player: activeplayer, phase: currentphase, winner: winner, result: null})
     } else {
         var coords = toRowCol(req.body.coords);
         var board = boards["player" + player];
         var placement = placements["player" + player];
         placement.fire(coords[0], coords[1], board);
-        console.log(board);
+        var hit = board[coords[0]][coords[1]] !== 1;
         var won = placement.isGameWon(board);
         if (won) {
             currentphase = phase.OVER;
             winner = player;
         }
-        res.json({player: activeplayer, phase: currentphase, winner: winner});
+
+        res.json({player: activeplayer, phase: currentphase, winner: winner, result: (hit ? "HIT" : "MISS")});
 
     }
     // TODO Switch players
 });
 
+router.post('/reset', function(req, res) {
+    newGame();
+    res.json({player: activeplayer, phase: currentphase, winner: winner});
+});
+
 app.use('/', router)
 // =============================================================================
+app.use('/static', express.static("./static"));
 app.listen(port);
 console.log('Magic happens on port ' + port);
