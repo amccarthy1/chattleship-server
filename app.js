@@ -1,7 +1,7 @@
 // initially, load in ship placements from json files.
+// TODO allow fleet configuration via chat commands
 var p1place = require("./player1.json");
 var p2place = require("./player2.json");
-
 
 function newBoard() {
     return [
@@ -31,6 +31,10 @@ var phase = {
     FIRING: 1,
     OVER: 2
 }
+
+var activeplayer = 1;
+var currentphase = phase.SETUP;
+var winner = null;
 
 // rows and columns should be 0-based internally, and 1-based externally
 var rows = {
@@ -151,7 +155,6 @@ ShipPlacements.prototype.fire = function(row, col, board) {
     }
 }
 ShipPlacements.prototype.checkSunk = function(ship, board) {
-    debugger;
     var tiles = this.shipToCoords[ship];
     for (var i = 0; i < tiles.length; i++) {
         var c = toRowCol(tiles[i]);
@@ -171,7 +174,7 @@ ShipPlacements.prototype.isGameWon = function(board) {
         if (Object.prototype.hasOwnProperty.call(this.coordsToShips, coord)) {
             var rc = toRowCol(coord);
             var row = rc[0]; var col = rc[1];
-            if (board[row, col] === 0) {
+            if (board[row][col] === 0) {
                 return false;
             }
         }
@@ -211,14 +214,74 @@ function newGame() {
     boards.player2 = newBoard();
     placements.player1 = fromJson(p1place);
     placements.player2 = fromJson(p2place);
+    currentphase = phase.FIRING;
+    activeplayer = 1;
+    winner = null;
 }
-
-debugger;
 newGame();
-placements.player1.debug();
 
-placements.player1.fire(2, 0, boards.player1);
-placements.player1.fire(2, 1, boards.player1);
-placements.player1.fire(2, 2, boards.player1);
-placements.player1.fire(5, 5, boards.player1);
-console.log(boards.player1);
+///////////////////////////////////////////////////////////////////////////////
+// call the packages we need
+var express    = require('express');        // call express
+var app        = express();                 // define our app using express
+var bodyParser = require('body-parser');
+
+// configure app to use bodyParser()
+// this will let us get the data from a POST
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+var port = process.env.PORT || 8080;        // set our port
+
+// ROUTES FOR OUR API
+// =============================================================================
+var router = express.Router();              // get an instance of the express Router
+
+// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
+router.get('/', function(req, res) {
+    res.json({ message: 'hooray! welcome to our api!' });
+});
+
+router.get('/board', function(req, res) {
+    res.json({
+        player1: {
+            board: boards.player1
+        },
+        player2: {
+            board: boards.player2
+        }
+    });
+});
+
+router.get('/gamedata', function(req, res) {
+    res.json({
+        player: activeplayer,
+        phase: currentphase
+    })
+});
+
+router.post('/fire', function(req, res) {
+    var player = req.body.player;
+    if (player !== activeplayer || currentphase !== phase.FIRING) {
+        res.json({player: activeplayer, phase: currentphase, winner: winner})
+    } else {
+        var coords = toRowCol(req.body.coords);
+        var board = boards["player" + player];
+        var placement = placements["player" + player];
+        placement.fire(coords[0], coords[1], board);
+        console.log(board);
+        var won = placement.isGameWon(board);
+        if (won) {
+            currentphase = phase.OVER;
+            winner = player;
+        }
+        res.json({player: activeplayer, phase: currentphase, winner: winner});
+
+    }
+    // TODO Switch players
+});
+
+app.use('/', router)
+// =============================================================================
+app.listen(port);
+console.log('Magic happens on port ' + port);
