@@ -18,6 +18,7 @@ To place a ship in the fleet, send HTTP POST request to `/place`
 post body should be of this form:
 ```json
 {
+  "player": 1,
   "coords": "F7",
   "orientation": "h"
 }
@@ -46,5 +47,6 @@ Response will be of this form:
 }
 ```
 where `0` is an empty space, `1` is a white marker, and `2` is a red marker.
+`3` means that the ship has been sunk. (blue marker)
 
 when the game is over, "winner" will be set to either "player1" or "player2"

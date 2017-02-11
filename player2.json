@@ -1,0 +1,7 @@
+{
+    "CARRIER": "VA1",
+    "BATTLESHIP": "VA2",
+    "CRUISER": "VA3",
+    "SUBMARINE": "VA4",
+    "DESTROYER": "VA5"
+}
