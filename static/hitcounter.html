@@ -1,0 +1,106 @@
+<!--
+ * [DISCLAIMER] * THIS IS HACKATHON-QUALITY CODE.
+ * BY READING THIS SOURCE FILE, YOU UNDERSTAND THAT THIS CODE IS NOT OF
+ * PRODUCTION QUALITY, AND WAS WRITTEN IN A 24-HOUR TIMESPAN.
+ * IT IS NOT ACTIVELY MAINTAINED.
+-->
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Chattleship UI</title>
+    <!-- I hate myself for this -->
+    <!-- TODO rewrite without jQuery -->
+    <script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
+    <style>
+table {
+    border-collapse: collapse;
+}
+table th, table td {
+    padding: 0;
+}
+td.header {
+    font-weight: bold;
+    width: 32px;
+    text-align: center;
+}
+th {
+    height: 32px;
+}
+
+td.header, th {
+    background-color: #182133;
+    color: #FFF;
+    font-family: 'Inconsolata', monospace;
+    font-size: 1.9em;
+}
+
+/* Different tile backgrounds for different tile states */
+.tile {
+    width: 64px;
+    height: 64px;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight:bold;
+    font-family: 'Inconsolata', monospace;
+}
+.tile-empty { /* No shots have been fired here this game */
+    background-image: url("/static/base.png");
+}
+.tile-hit { /* Shot fired here, hit, red peg */
+    background-image: url("/static/base-red.png");
+}
+
+    </style>
+    <script>
+function updateHits() {
+    $.ajax('/board', {
+        dataType: "json",
+        success: function(response) {
+            var hits1 = response.state.p1sunk;
+            var hits2 = response.state.p2sunk;
+            $(".tile").removeClass("tile-hit");
+            for (var i = 1; i <= hits1; i++) {
+                $("#hit-1-" + i).addClass("tile-hit");
+            }
+            for (var i = 1; i <= hits2; i++) {
+                $("#hit-2-" + i).addClass("tile-hit");
+            }
+        }
+    });
+}
+updateHits();
+setInterval(updateHits, 2000);
+    </script>
+</head>
+<body>
+    <table id="hit-counter">
+        <thead>
+            <tr>
+                <th colspan="6">Sunken Ships</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="header">Chat</td>
+                <td id="hit-1-1" class="tile tile-empty"></td>
+                <td id="hit-1-2" class="tile tile-empty"></td>
+                <td id="hit-1-3" class="tile tile-empty"></td>
+                <td id="hit-1-4" class="tile tile-empty"></td>
+                <td id="hit-1-5" class="tile tile-empty"></td>
+            </tr>
+            <tr>
+                <td class="header">Ai</td>
+                <td id="hit-2-1" class="tile tile-empty"></td>
+                <td id="hit-2-2" class="tile tile-empty"></td>
+                <td id="hit-2-3" class="tile tile-empty"></td>
+                <td id="hit-2-4" class="tile tile-empty"></td>
+                <td id="hit-2-5" class="tile tile-empty"></td>
+            </tr>
+        </tbody>
+    </table>
+</html>

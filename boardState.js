@@ -62,6 +62,7 @@ function ShipPlacements() {
     this.shipToCoords = {};
     this.coordsToShips = {};
     this.lastSpace = null;
+    this.sunk = 0;
 }
 
 
@@ -178,6 +179,9 @@ ShipPlacements.prototype.debug = function() {
         console.log(ship + ": " + this.shipToCoords[ship]);
     }
 }
+ShipPlacements.prototype.sinkOne = function() {
+    this.sunk++;
+}
 
 /**
  * Construct a new ShipPlacements from a json file of coords.
@@ -231,6 +235,8 @@ function asObj() {
     obj.boards.player2 = boards.player2;
     obj.p1last = placements.player1.lastSpace;
     obj.p2last = placements.player2.lastSpace;
+    obj.p1sunk = placements.player1.sunk;
+    obj.p2sunk = placements.player2.sunk;
     obj.phase = currentphase;
     obj.activeplayer = activeplayer;
     obj.winner = winner;
@@ -255,9 +261,13 @@ function fire(player, coords) {
     }
     var board = boards["player" + player];
     var plcmt = placements["player" + player];
+    var oldHitVal = boardLookup(board, coords);
     var rc = indexUtils.toRowCol(coords);
     plcmt.fire(rc[0], rc[1], board);
     var hitValue = boardLookup(board, coords);
+    if (hitValue === 3 && oldHitVal !== 3) {
+        plcmt.sinkOne();
+    }
     var result = [null, "MISS", "HIT", "SUNK"][hitValue];
     if (plcmt.isGameWon(board)) {
         currentphase = phase.OVER;
@@ -266,7 +276,12 @@ function fire(player, coords) {
         // AI turn
         var aicoords = ai.choose(boards.player2);
         var airc = indexUtils.toRowCol(aicoords);
+        var aiOldHitVal = boardLookup(boards.player2, aicoords);
         placements.player2.fire(airc[0], airc[1], boards.player2);
+        var aiHitVal = boardLookup(boards.player2, aicoords);
+        if (aiHitVal === 3 && aiOldHitVal !== 3) {
+            placements.player2.sinkOne();
+        }
         // DESTROYED by AI
         if (placements.player2.isGameWon(boards.player2)) {
             currentphase = phase.OVER;
