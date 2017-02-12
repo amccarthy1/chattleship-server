@@ -8,12 +8,45 @@
   src="https://code.jquery.com/jquery-3.1.1.min.js"
   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
   crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
     <style>
-.tile {
-    width: 2em;
-    height: 2em;
+table.board {
+    border-collapse: collapse;
+}
+table.board th, table.board td {
+    padding: 0;
+}
+td.header {
+    font-weight: bold;
+    width: 32px;
+    text-align: center;
+}
+th {
+    height: 32px;
 }
 
+td.header, th {
+    background-color: #182133;
+    color: #FFF;
+    font-family: 'Inconsolata', monospace;
+}
+
+.tile {
+    width: 64px;
+    height: 64px;
+}
+.tile-empty {
+    background-image: url("/static/base.png");
+}
+.tile-miss {
+    background-image: url("/static/base-white.png");
+}
+.tile-hit {
+    background-image: url("/static/base-red.png");
+}
+.tile-sunk {
+    background-image: url("/static/base-blue.png");
+}
 
     </style>
     <script>
@@ -24,12 +57,22 @@ function toAlphaNum(row, col) {
     var an_col = reverseCols[col];
     return an_row + an_col;
 }
+
+var classes = ["tile-empty", "tile-miss", "tile-hit", "tile-sunk"];
+function getClass(i) {
+    return classes[i];
+}
+
 function setBoard(board) {
     for (var r = 0; r < board.length; r++) {
         var row = board[r];
         for (var c = 0; c < row.length; c++) {
             var id = toAlphaNum(r, c);
-            document.getElementById(id).innerHTML = row[c];
+            $("#" + id)
+                .removeClass("tile-miss")
+                .removeClass("tile-hit")
+                .removeClass("tile-sunk")
+                .addClass(getClass(row[c]));
         }
     }
 }
@@ -49,19 +92,20 @@ function updateBoard() {
 
 $(document).ready(function() {
     updateBoard();
-    setInterval(updateBoard, 2000);
+    setInterval(updateBoard, 500);
 })
 
     </script>
 </head>
 <body>
-    <table>
+    <table class="board">
         <thead>
             <tr>
-                <th>x</th>
+                <th></th>
                 <th>1</th>
                 <th>2</th>
                 <th>3</th>
+                <th>4</th>
                 <th>5</th>
                 <th>6</th>
                 <th>7</th>
@@ -71,7 +115,7 @@ $(document).ready(function() {
             </tr>
         </thead>
         <tr>
-            <td>A</td>
+            <td class="header">A</td>
             <td class="tile" id="A1"></td>
             <td class="tile" id="A2"></td>
             <td class="tile" id="A3"></td>
@@ -84,7 +128,7 @@ $(document).ready(function() {
             <td class="tile" id="A10"></td>
         </tr>
         <tr>
-            <td>B</td>
+            <td class="header">B</td>
             <td class="tile" id="B1"></td>
             <td class="tile" id="B2"></td>
             <td class="tile" id="B3"></td>
@@ -96,7 +140,7 @@ $(document).ready(function() {
             <td class="tile" id="B9"></td>
             <td class="tile" id="B10"></td>
         </tr><tr>
-            <td>C</td>
+            <td class="header">C</td>
             <td class="tile" id="C1"></td>
             <td class="tile" id="C2"></td>
             <td class="tile" id="C3"></td>
@@ -108,7 +152,7 @@ $(document).ready(function() {
             <td class="tile" id="C9"></td>
             <td class="tile" id="C10"></td>
         </tr><tr>
-            <td>D</td>
+            <td class="header">D</td>
             <td class="tile" id="D1"></td>
             <td class="tile" id="D2"></td>
             <td class="tile" id="D3"></td>
@@ -120,7 +164,7 @@ $(document).ready(function() {
             <td class="tile" id="D9"></td>
             <td class="tile" id="D10"></td>
         </tr><tr>
-            <td>E</td>
+            <td class="header">E</td>
             <td class="tile" id="E1"></td>
             <td class="tile" id="E2"></td>
             <td class="tile" id="E3"></td>
@@ -132,7 +176,7 @@ $(document).ready(function() {
             <td class="tile" id="E9"></td>
             <td class="tile" id="E10"></td>
         </tr><tr>
-            <td>F</td>
+            <td class="header">F</td>
             <td class="tile" id="F1"></td>
             <td class="tile" id="F2"></td>
             <td class="tile" id="F3"></td>
@@ -144,7 +188,7 @@ $(document).ready(function() {
             <td class="tile" id="F9"></td>
             <td class="tile" id="F10"></td>
         </tr><tr>
-            <td>G</td>
+            <td class="header">G</td>
             <td class="tile" id="G1"></td>
             <td class="tile" id="G2"></td>
             <td class="tile" id="G3"></td>
@@ -156,7 +200,7 @@ $(document).ready(function() {
             <td class="tile" id="G9"></td>
             <td class="tile" id="G10"></td>
         </tr><tr>
-            <td>H</td>
+            <td class="header">H</td>
             <td class="tile" id="H1"></td>
             <td class="tile" id="H2"></td>
             <td class="tile" id="H3"></td>
@@ -168,7 +212,7 @@ $(document).ready(function() {
             <td class="tile" id="H9"></td>
             <td class="tile" id="H10"></td>
         </tr><tr>
-            <td>I</td>
+            <td class="header">I</td>
             <td class="tile" id="I1"></td>
             <td class="tile" id="I2"></td>
             <td class="tile" id="I3"></td>
@@ -180,7 +224,7 @@ $(document).ready(function() {
             <td class="tile" id="I9"></td>
             <td class="tile" id="I10"></td>
         </tr><tr>
-            <td>J</td>
+            <td class="header">J</td>
             <td class="tile" id="J1"></td>
             <td class="tile" id="J2"></td>
             <td class="tile" id="J3"></td>
