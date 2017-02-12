@@ -22,6 +22,33 @@ post body should be of this form:
   "coords": "F7",
   "orientation": "h"
 }
+
+All requests will receive a response of the following form:
+```json
+{
+    "success": true,
+    "error": null,
+    "result": {
+        ... [Endpoint-dependent results here]
+    },
+    "state": {
+        "boards": {
+            "player1": [
+                [0, 0, 0, 1, 0, 0, 2, 0, 0, 1],
+                [0, 1, 0, 0, 0, 0, 2, 0, 1, 0],
+                ...
+                [0, 0, 2, 0, 1, 1, 0, 0, 0, 1]
+            ],
+            "player2": [
+                ...
+            ]
+        },
+        "phase": 1,
+        "activeplayer": 1,
+        "winner": null
+    }
+}
+
 ```
 `coords` specifies the top left coordinate of the ship
 `orientation` is either `h` for horizontal or `v` for vertical

@@ -1,7 +1,3 @@
 {
-    "CARRIER": "HA1",
-    "BATTLESHIP": "HB1",
-    "CRUISER": "HC1",
-    "SUBMARINE": "HD1",
     "DESTROYER": "HE1"
 }

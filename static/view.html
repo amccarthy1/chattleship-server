@@ -78,14 +78,11 @@ function setBoard(board) {
 }
 
 function updateBoard() {
-    $.ajax('/board',{
+    $.ajax('/board', {
         dataType: "json",
         success: function(response) {
-            if (response.player1) {
-                if (response.player1.board) {
-                    setBoard(response.player1.board);
-                }
-            }
+            var board = response.state.boards.player1;
+            setBoard(board);
         }
     })
 }
