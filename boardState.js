@@ -253,7 +253,8 @@ function fire(player, coords) {
     var plcmt = placements["player" + player];
     var rc = indexUtils.toRowCol(coords);
     plcmt.fire(rc[0], rc[1], board);
-    var result = (boardLookup(board, coords) !== 1 ? "HIT" : "MISS");
+    var hitValue = boardLookup(board, coords);
+    var result = [null, "MISS", "HIT", "SUNK"][hitValue];
     if (plcmt.isGameWon(board)) {
         currentphase = phase.OVER;
         winner = player;
@@ -262,7 +263,6 @@ function fire(player, coords) {
         var aicoords = ai.choose(boards.player2);
         var airc = indexUtils.toRowCol(aicoords);
         placements.player2.fire(airc[0], airc[1], boards.player2);
-        console.log(boards.player2);
         // DESTROYED by AI
         if (placements.player2.isGameWon(boards.player2)) {
             currentphase = phase.OVER;
