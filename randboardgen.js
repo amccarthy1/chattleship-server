@@ -13,7 +13,6 @@ const shipsToPlace = ["CARRIER", "BATTLESHIP", "CRUISER", "SUBMARINE", "DESTROYE
 function generate(placement) {
     for (var i = 0; i < shipsToPlace.length; i++) {
         // place a ship
-        debugger;
         var placed = false;
         while (!placed) {
             try {

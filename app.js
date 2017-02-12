@@ -17,6 +17,7 @@ const bodyParser = require('body-parser');
 
 const boardState = require("./boardState.js");
 const indexUtils = require("./indexUtils.js");
+const ai = require("./ai.js");
 
 boardState.newGame();
 
@@ -45,7 +46,11 @@ router.post('/fire', function(req, res) {
     var player = req.body.player;
     var coords = req.body.coords;
     try {
-        res.json(boardState.fire(player, coords));
+        if (player !== 1) {
+            throw "You are player 1";
+        }
+        var obj = boardState.fire(player, coords);
+        res.json(obj);
     } catch (err) {
         res.json({
             success: false,

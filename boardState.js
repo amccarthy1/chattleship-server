@@ -10,6 +10,7 @@
  */
 const indexUtils = require("./indexUtils.js");
 const boardgen = require("./randboardgen.js");
+const ai = require("./ai.js");
 
 function newBoard() {
     return [
@@ -206,6 +207,7 @@ function newGame() {
     placements.player2 = new ShipPlacements();
     boardgen.generate(placements.player1);
     boardgen.generate(placements.player2);
+    ai.reset(); // reset AI board state
     currentphase = phase.FIRING;
     activeplayer = 1;
     winner = null;
@@ -255,6 +257,18 @@ function fire(player, coords) {
     if (plcmt.isGameWon(board)) {
         currentphase = phase.OVER;
         winner = player;
+    } else {
+        // AI turn
+        var aicoords = ai.choose(boards.player2);
+        var airc = indexUtils.toRowCol(aicoords);
+        placements.player2.fire(airc[0], airc[1], boards.player2);
+        console.log(boards.player2);
+        // DESTROYED by AI
+        if (placements.player2.isGameWon(boards.player2)) {
+            currentphase = phase.OVER;
+            winner = 2;
+            // gg
+        }
     }
     return {
         success: true,
