@@ -1,3 +1,12 @@
+/**
+ * [DISCLAIMER] * THIS IS HACKATHON-QUALITY CODE.
+ * BY READING THIS SOURCE FILE, YOU UNDERSTAND THAT THIS CODE IS NOT OF
+ * PRODUCTION QUALITY, AND WAS WRITTEN IN A 24-HOUR TIMESPAN.
+ * IT IS NOT ACTIVELY MAINTAINED.
+ * indexUtils.js
+ * Helper functions for [de]serialization of Battleship coordinates.
+ */
+
 // rows and columns should be 0-based internally, and 1-based externally
 var rows = {
     A:0,

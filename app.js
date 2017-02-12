@@ -1,3 +1,14 @@
+/**
+ * [DISCLAIMER] * THIS IS HACKATHON-QUALITY CODE.
+ * BY READING THIS SOURCE FILE, YOU UNDERSTAND THAT THIS CODE IS NOT OF
+ * PRODUCTION QUALITY, AND WAS WRITTEN IN A 24-HOUR TIMESPAN.
+ * IT IS NOT ACTIVELY MAINTAINED.
+ * app.js
+ * Main server for chattleship. Uses express to expose an HTTP API for game
+ *  control. Very stateful. Very bad.
+ * Exposes a static board view at /static/view.html. This is the view used by
+ *  twitch.tv/chattleship
+ */
 ///////////////////////////////////////////////////////////////////////////////
 // call the packages we need
 const express    = require('express');        // call express
@@ -52,6 +63,7 @@ router.post('/reset', function(req, res) {
 
 app.use('/', router)
 // =============================================================================
+// host the static view webpage
 app.use('/static', express.static("./static"));
 app.listen(port);
-console.log('Magic happens on port ' + port);
+console.log('ChattleShip API running on port ' + port);

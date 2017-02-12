@@ -1,4 +1,15 @@
+/**
+ * [DISCLAIMER] * THIS IS HACKATHON-QUALITY CODE.
+ * BY READING THIS SOURCE FILE, YOU UNDERSTAND THAT THIS CODE IS NOT OF
+ * PRODUCTION QUALITY, AND WAS WRITTEN IN A 24-HOUR TIMESPAN.
+ * IT IS NOT ACTIVELY MAINTAINED.
+ * boardState.js
+ * Contains objects and functions for manipulating the state of a game of
+ *  Battleship.
+ *
+ */
 const indexUtils = require("./indexUtils.js");
+const boardgen = require("./randboardgen.js");
 
 function newBoard() {
     return [
@@ -34,15 +45,36 @@ var currentphase;
 var activeplayer;
 var winner;
 
-// initially, load in ship placements from json files.
-// TODO allow fleet configuration via chat commands
-var p1place = require("./player1.json");
-var p2place = require("./player2.json");
+// Ship placements will be done randomly for the computer.
+// TODO allow p1 fleet configuration via chat commands
 
+/**
+ * Really really useful class that allows bidirectional lookups of where ships
+ * are placed on the board. You can lookup the coordinates of a ship, and you
+ * can get the ship (if there is one) at given coordinates.
+ * Has some helpers for determining if a ship has been sunk or the game has been
+ * won.
+ * Each player has one ShipPlacements and one Board. Together, they constitute
+ * the entire game state.
+ */
 function ShipPlacements() {
     this.shipToCoords = {};
     this.coordsToShips = {};
 }
+
+
+/**
+ * Place a ship given some coordinates and an orientation
+ * @param {string} shipName The name of the ship in all caps. Acceptable ship
+ *  names are: "CARRIER", "BATTLESHIP", "CRUISER", "SUBMARINE", and "DESTROYER"
+ * @param {number} row The 0-based row index to put the top-left corner of the
+ *  ship at.
+ * @param {number} col The 0-based col index to put the top-left corner of the
+ *  ship at.
+ * @param {string} orientation The orientation (either 'H' for horizontal or
+ *  'V' for vertical) to place the ship.
+ * @throws {string} Exception An error message if ship location is invalid.
+ */
 ShipPlacements.prototype.placeShip = function(shipName, row, col, orientation) {
     if (orientation === 'H') {
         this.placeHorizontal(shipName, row, col);
@@ -145,7 +177,7 @@ ShipPlacements.prototype.debug = function() {
 }
 
 /**
- * Construct a new ShipPlacements from a json file of coords
+ * Construct a new ShipPlacements from a json file of coords.
  */
 function fromJson(obj) {
     var res = new ShipPlacements();
@@ -162,12 +194,18 @@ function fromJson(obj) {
 var boards = {};
 var placements = {};
 
+/**
+ * Reset game state, generate new boards.
+ */
 function newGame() {
     boards.player1 = newBoard();
     boards.player2 = newBoard();
     // TODO randomize
-    placements.player1 = fromJson(p1place);
-    placements.player2 = fromJson(p2place);
+    // placements.player1 = fromJson(p1place);
+    placements.player1 = new ShipPlacements();
+    placements.player2 = new ShipPlacements();
+    boardgen.generate(placements.player1);
+    boardgen.generate(placements.player2);
     currentphase = phase.FIRING;
     activeplayer = 1;
     winner = null;
@@ -179,6 +217,9 @@ function newGame() {
     };
 }
 
+/**
+ * Serialize game state as a JSON obj for api consistency.
+ */
 function asObj() {
     var obj = {};
     obj.boards = {};
@@ -190,11 +231,18 @@ function asObj() {
     return obj;
 }
 
+/**
+ * helper to convert from alphanumeric row/col to numeric row/col and lookup
+ * board square
+ */
 function boardLookup(board, coords) {
     var rc = indexUtils.toRowCol(coords);
     return board[rc[0]][rc[1]];
 }
 
+/**
+ * Fire a shot at the given coords on the given player's board
+ */
 function fire(player, coords) {
     if (player !== activeplayer) {
         throw "It is not your turn";

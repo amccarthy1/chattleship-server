@@ -1,6 +1,8 @@
 Chattleship Server
 ==================
 
+***BrickHack 2016 Project***
+
 A very simple and bad server for playing Battleship.
 
 Send HTTP POST requests to `/fire`
