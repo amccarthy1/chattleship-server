@@ -29,22 +29,24 @@ td.header, th {
     background-color: #182133;
     color: #FFF;
     font-family: 'Inconsolata', monospace;
+    font-size: 2em;
 }
 
+/* Different tile backgrounds for different tile states */
 .tile {
     width: 64px;
     height: 64px;
 }
-.tile-empty {
+.tile-empty { /* No shots have been fired here this game */
     background-image: url("/static/base.png");
 }
-.tile-miss {
+.tile-miss { /* Shot fired here, miss, white peg */
     background-image: url("/static/base-white.png");
 }
-.tile-hit {
+.tile-hit { /* Shot fired here, hit, red peg */
     background-image: url("/static/base-red.png");
 }
-.tile-sunk {
+.tile-sunk { /* Shot fired here, hit, sunk, blue peg */
     background-image: url("/static/base-blue.png");
 }
 
