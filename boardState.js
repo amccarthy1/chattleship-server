@@ -61,6 +61,7 @@ var winner;
 function ShipPlacements() {
     this.shipToCoords = {};
     this.coordsToShips = {};
+    this.lastSpace = null;
 }
 
 
@@ -129,6 +130,7 @@ ShipPlacements.prototype.placeVertical = function(shipName, row, col) {
     }
 }
 ShipPlacements.prototype.fire = function(row, col, board) {
+    this.lastSpace = [row, col];
     if (board[row][col] !== 0) {
         return board; // we're firing at a location that's already been fired
     }
@@ -227,6 +229,8 @@ function asObj() {
     obj.boards = {};
     obj.boards.player1 = boards.player1;
     obj.boards.player2 = boards.player2;
+    obj.p1last = placements.player1.lastSpace;
+    obj.p2last = placements.player2.lastSpace;
     obj.phase = currentphase;
     obj.activeplayer = activeplayer;
     obj.winner = winner;

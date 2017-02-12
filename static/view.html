@@ -56,6 +56,15 @@ td.header, th {
 .tile-sunk { /* Shot fired here, hit, sunk, blue peg */
     background-image: url("/static/base-blue.png");
 }
+.last.tile-miss { /* Shot fired here, miss, white peg */
+    background-image: url("/static/last-white.png");
+}
+.last.tile-hit { /* Shot fired here, hit, red peg */
+    background-image: url("/static/last-red.png");
+}
+.last.tile-sunk { /* Shot fired here, hit, sunk, blue peg */
+    background-image: url("/static/last-blue.png");
+}
 
     </style>
     <script>
@@ -72,7 +81,12 @@ function getClass(i) {
     return classes[i];
 }
 
-function setBoard(board) {
+function setBoard(board, last) {
+    $('.last').removeClass('last');
+    if (last) {
+        var id = toAlphaNum(last[0], last[1]);
+        $("#" + id).addClass('last');
+    }
     for (var r = 0; r < board.length; r++) {
         var row = board[r];
         for (var c = 0; c < row.length; c++) {
@@ -91,7 +105,7 @@ function updateBoard() {
         dataType: "json",
         success: function(response) {
             var board = response.state.boards.player1;
-            setBoard(board);
+            setBoard(board, response.state.p1last);
         }
     })
 }
