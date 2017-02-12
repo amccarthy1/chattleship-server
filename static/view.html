@@ -43,6 +43,10 @@ td.header, th {
 .tile {
     width: 64px;
     height: 64px;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight:bold;
+    font-family: 'Inconsolata', monospace;
 }
 .tile-empty { /* No shots have been fired here this game */
     background-image: url("/static/base.png");
@@ -50,11 +54,23 @@ td.header, th {
 .tile-miss { /* Shot fired here, miss, white peg */
     background-image: url("/static/base-white.png");
 }
+.tile-miss:before {
+    content: "M";
+    color: #000;
+}
 .tile-hit { /* Shot fired here, hit, red peg */
     background-image: url("/static/base-red.png");
 }
+.tile-hit:before {
+    content: "H";
+    color: #000;
+}
 .tile-sunk { /* Shot fired here, hit, sunk, blue peg */
     background-image: url("/static/base-blue.png");
+}
+.tile-sunk:before {
+    content: "S";
+    color: #000;
 }
 .last.tile-miss { /* Shot fired here, miss, white peg */
     background-image: url("/static/last-white.png");
